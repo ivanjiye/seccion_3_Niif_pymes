@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Negocio en Marcha - NIIF Pymes (Sección 3)</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuente Inter para legibilidad profesional -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        /* Estilos específicos para impresión / exportación a PDF limpia */
+        @media print {
+            body {
+                background-color: #ffffff !important;
+                font-size: 11px;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-shadow-none {
+                box-shadow: none !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+            .print-break-inside {
+                break-inside: avoid;
+            }
+            input, textarea, select {
+                border: none !important;
+                background: transparent !important;
+                padding: 2px !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased pb-16">
+
+    <!-- Barra Superior de Herramientas (No se imprime) -->
+    <nav class="no-print sticky top-0 z-50 bg-slate-900 text-white shadow-md px-4 py-3">
+        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center space-x-2">
+                <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="font-bold text-sm sm:text-base tracking-wide">Papel de Trabajo NIIF Pymes • Sección 3</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="cargarEjemplo()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm font-medium rounded-lg transition">
+                    Cargar Ejemplo
+                </button>
+                <button onclick="generarNotaRevelacion()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold rounded-lg shadow transition flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Generar Nota Revelación
+                </button>
+                <button onclick="limpiarFormulario()" class="px-3 py-1.5 bg-rose-600/90 hover:bg-rose-600 text-xs sm:text-sm font-medium rounded-lg transition">
+                    Limpiar
+                </button>
+                <button onclick="window.print()" class="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold text-xs sm:text-sm rounded-lg shadow transition flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                    Imprimir / Guardar PDF
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal del Documento -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 mt-6 space-y-6">
+
+        <!-- Encabezado y Datos Generales de la Entidad -->
+        <header class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 print-shadow-none">
+            <div class="flex flex-col md:flex-row md:items-start justify-between border-b border-slate-200 pb-5 mb-5 gap-4">
+                <div>
+                    <span class="inline-block px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-md mb-2">
+                        NIIF para las Pymes • Párrafos 3.8 y 3.9
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Evaluación de Negocio en Marcha</h1>
+                    <p class="text-slate-500 text-sm mt-1">Horizonte mínimo de evaluación: 12 meses siguientes a la fecha de corte</p>
+                </div>
+
+                <!-- Columna Derecha: Logo Escuela de Contaduría + Diagnóstico Automático -->
+                <div class="flex flex-col items-start md:items-end gap-3">
+                    <!-- Logo Institucional Escuela de Contaduría (Vectorial de alta nitidez) -->
+                    <div class="flex items-center gap-2.5 select-none" aria-label="Logo Escuela de Contaduría">
+                        <svg class="w-11 h-11 shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="16" y="10" width="74" height="74" rx="16" stroke="#F8B88B" stroke-width="11"/>
+                            <path d="M27 52C39 55 67 51 67 36C67 27 57 24 47 29C35 35 32 55 41 66C49 75 66 72 75 63" stroke="#42210B" stroke-width="10" stroke-linecap="round"/>
+                            <path d="M10 66L37 73L27 81L23 93L10 66Z" fill="#42210B"/>
+                        </svg>
+                        <div class="leading-none text-left">
+                            <span class="block text-[15px] font-normal text-[#42210B] tracking-tight">Escuela de</span>
+                            <span class="block text-[22px] font-extrabold text-[#42210B] tracking-tight -mt-0.5">contaduría</span>
+                        </div>
+                    </div>
+
+                    <!-- Panel de Diagnóstico Automático en Tiempo Real -->
+                    <div id="badge-diagnostico" class="px-4 py-2.5 rounded-xl bg-slate-100 border border-slate-300 text-left md:text-right w-full md:w-auto">
+                        <span class="block text-[11px] uppercase font-semibold text-slate-500">Diagnóstico Preliminar</span>
+                        <span id="texto-diagnostico" class="text-sm sm:text-base font-bold text-slate-800">Pendiente de Evaluación</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Entidad / Razón Social</label>
+                    <input type="text" id="entidad" placeholder="Ej: Comercializadora Andina S.A.S." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">NIT / Identificación</label>
+                    <input type="text" id="nit" placeholder="Ej: 900.123.456-7" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Fecha de Corte Evaluada</label>
+                    <input type="date" id="fecha_corte" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Fin Horizonte (12 Meses)</label>
+                    <input type="date" id="fecha_horizonte" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-slate-50 text-slate-600" readonly>
+                </div>
+            </div>
+        </header>
+
+        <!-- Barra de Resumen de Indicadores -->
+        <section class="grid grid-cols-2 sm:grid-cols-4 gap-4 no-print">
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <p class="text-xs text-slate-500 font-medium">Pruebas Evaluadas</p>
+                <p id="stat-evaluadas" class="text-2xl font-bold text-slate-800 mt-1">0 / 14</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-emerald-200 shadow-sm">
+                <p class="text-xs text-emerald-600 font-medium">Riesgo Bajo (Cumple)</p>
+                <p id="stat-bajo" class="text-2xl font-bold text-emerald-700 mt-1">0</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-amber-200 shadow-sm">
+                <p class="text-xs text-amber-600 font-medium">Riesgo Medio (Alerta)</p>
+                <p id="stat-medio" class="text-2xl font-bold text-amber-700 mt-1">0</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-rose-200 shadow-sm">
+                <p class="text-xs text-rose-600 font-medium">Riesgo Alto (Crítico)</p>
+                <p id="stat-alto" class="text-2xl font-bold text-rose-700 mt-1">0</p>
+            </div>
+        </section>
+
+        <!-- Contenedor Dinámico de las Secciones de Pruebas -->
+        <div id="contenedor-pruebas" class="space-y-6"></div>
+
+        <!-- Sección 4: Evaluación de Planes de Mitigación -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 print-shadow-none print-break-inside">
+            <div class="border-b border-slate-200 pb-3 mb-4">
+                <h2 class="text-lg font-bold text-slate-900">4. Evaluación de Planes de Mitigación de la Gerencia</h2>
+                <p class="text-xs text-slate-500">Diligenciar obligatoriamente si alguna prueba anterior arrojó Riesgo Medio o Riesgo Alto.</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Descripción del evento o condición de riesgo detectado</label>
+                    <textarea id="mitigacion_riesgo" rows="2" placeholder="Ej: Capital de trabajo neto negativo debido al vencimiento de crédito bancario en 4 meses..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Plan de acción concreto y viable de la Gerencia</label>
+                    <textarea id="mitigacion_plan" rows="2" placeholder="Ej: Reestructuración de deuda a 48 meses y capitalización en efectivo por parte de los accionistas..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Evidencia documental que soporta que el plan es ejecutable</label>
+                    <textarea id="mitigacion_evidencia" rows="2" placeholder="Ej: Carta de aprobación del comité de crédito bancario y Acta de Asamblea Extraordinaria..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 5: Conclusión Técnica Final -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 print-shadow-none print-break-inside">
+            <div class="border-b border-slate-200 pb-3 mb-4">
+                <h2 class="text-lg font-bold text-slate-900">5. Conclusión Técnica Final (Decisión Contable bajo Sección 3)</h2>
+                <p class="text-xs text-slate-500">Seleccione el escenario aplicable a los Estados Financieros del periodo evaluado.</p>
+            </div>
+
+            <div class="space-y-3">
+                <label class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                    <input type="radio" name="escenario_final" value="A" class="mt-1 h-4 w-4 text-emerald-600 focus:ring-emerald-500">
+                    <div>
+                        <span class="block font-bold text-sm text-emerald-800">ESCENARIO A – Negocio en Marcha sin Incertidumbres Materiales</span>
+                        <span class="block text-xs text-slate-600 mt-0.5">No existen dudas significativas sobre la capacidad de la entidad para continuar operando. Los estados financieros se preparan bajo la hipótesis normal de negocio en marcha.</span>
+                    </div>
+                </label>
+
+                <label class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                    <input type="radio" name="escenario_final" value="B" class="mt-1 h-4 w-4 text-amber-600 focus:ring-amber-500">
+                    <div>
+                        <span class="block font-bold text-sm text-amber-800">ESCENARIO B – Negocio en Marcha con Incertidumbre Material (Requiere Revelación)</span>
+                        <span class="block text-xs text-slate-600 mt-0.5">Existen dudas significativas, pero los planes de mitigación de la gerencia son viables y están soportados. Se mantiene la base de negocio en marcha y <strong>se incluye una Nota de Revelación explícita</strong> detallando los riesgos y los planes de acción (Párrafo 3.9).</span>
+                    </div>
+                </label>
+
+                <label class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                    <input type="radio" name="escenario_final" value="C" class="mt-1 h-4 w-4 text-rose-600 focus:ring-rose-500">
+                    <div>
+                        <span class="block font-bold text-sm text-rose-800">ESCENARIO C – Ruptura de la Hipótesis de Negocio en Marcha (Base de Liquidación)</span>
+                        <span class="block text-xs text-slate-600 mt-0.5">La gerencia tiene la intención de liquidar la entidad, cesar operaciones o no tiene otra alternativa realista. <strong>No se aplica NIIF Pymes bajo base de negocio en marcha</strong>; se preparan estados financieros bajo <strong>base de liquidación</strong> y se revela este hecho (Párrafo 3.9).</span>
+                    </div>
+                </label>
+            </div>
+
+            <!-- Bloque de Firmas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10 pt-6 border-t border-slate-200">
+                <div>
+                    <div class="border-b border-slate-400 h-12"></div>
+                    <input type="text" id="firma_contador" placeholder="Nombre del Contador Público" class="w-full text-sm font-semibold text-slate-800 mt-2 focus:outline-none">
+                    <input type="text" id="tp_contador" placeholder="Tarjeta Profesional N°" class="w-full text-xs text-slate-500 focus:outline-none">
+                    <span class="block text-xs font-medium text-slate-400 mt-0.5">Elaborado por (Contador Público)</span>
+                </div>
+                <div>
+                    <div class="border-b border-slate-400 h-12"></div>
+                    <input type="text" id="firma_gerente" placeholder="Nombre del Representante Legal" class="w-full text-sm font-semibold text-slate-800 mt-2 focus:outline-none">
+                    <input type="text" id="cc_gerente" placeholder="Cédula de Ciudadanía" class="w-full text-xs text-slate-500 focus:outline-none">
+                    <span class="block text-xs font-medium text-slate-400 mt-0.5">Aprobado por (Representante Legal / Gerencia)</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Personalizado para Confirmaciones/Mensajes (Sin usar alert/confirm) -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl">
+            <h3 id="modal-title" class="text-lg font-bold text-slate-900">Notificación</h3>
+            <p id="modal-msg" class="text-sm text-slate-600 mt-2"></p>
+            <div class="mt-5 flex justify-end gap-2">
+                <button onclick="cerrarModal()" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded-lg hover:bg-slate-700">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Generador de Nota de Revelación (Word / Texto Plano) -->
+    <div id="modal-nota" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div>
+                    <span class="text-xs font-semibold text-blue-600 uppercase">Borrador Técnico • NIIF Pymes Sección 3</span>
+                    <h3 class="text-lg font-bold text-slate-900">Nota a los Estados Financieros: Hipótesis de Negocio en Marcha</h3>
+                </div>
+                <button onclick="cerrarModalNota()" class="text-slate-400 hover:text-slate-700 p-1">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <p class="text-xs text-slate-500 mt-3 mb-2">
+                Este texto ha sido redactado automáticamente integrando la razón social, fecha de corte, hallazgos de riesgo detectados, planes de mitigación y el escenario seleccionado. Puedes editarlo libremente antes de exportarlo:
+            </p>
+
+            <textarea id="texto-nota-revelacion" rows="13" class="w-full rounded-xl border border-slate-300 p-4 text-sm text-slate-800 font-serif leading-relaxed bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none overflow-y-auto"></textarea>
+
+            <div class="mt-4 pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                <span id="feedback-copiado" class="text-xs font-semibold text-emerald-600 opacity-0 transition-opacity">✓ Texto copiado al portapapeles</span>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="copiarNotaTexto()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs sm:text-sm font-medium rounded-lg transition flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                        </svg>
+                        Copiar Texto Plano
+                    </button>
+                    <button onclick="descargarNotaWord()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold rounded-lg shadow transition flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        Descargar en Word (.doc)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estructura de datos con las 14 pruebas puntuales de la Sección 3 NIIF para las Pymes
+        const seccionesPruebas = [
+            {
+                titulo: "1. Pruebas Financieras y de Liquidez",
+                objetivo: "Verificar la capacidad de la entidad para cumplir sus obligaciones exigibles en los próximos 12 meses.",
+                items: [
+                    { id: "1.1", nombre: "Capital de Trabajo Neto", desc: "¿El resultado de Activo Corriente - Pasivo Corriente es positivo al cierre?", evidencia: "Estado de Situación Financiera" },
+                    { id: "1.2", nombre: "Flujo de Caja Proyectado (12 meses)", desc: "¿El presupuesto de efectivo demuestra liquidez mes a mes sin cesación de pagos?", evidencia: "Presupuesto de Tesorería aprobado" },
+                    { id: "1.3", nombre: "Vencimiento de Deudas", desc: "¿Los créditos a corto plazo cuentan con fuentes claras de pago o acuerdos de refinanciación?", evidencia: "Tabla amortización / Contratos" },
+                    { id: "1.4", nombre: "Cumplimiento de Covenants", desc: "¿La entidad cumple con todos los indicadores financieros exigidos en contratos de deuda?", evidencia: "Certificaciones bancarias" },
+                    { id: "1.5", nombre: "Flujos de Efectivo Operativos", desc: "¿La operación principal genera flujo de caja positivo (o hay plan real para revertirlo)?", evidencia: "Estado de Flujos de Efectivo" },
+                    { id: "1.6", nombre: "Atraso en Obligaciones Críticas", desc: "¿La empresa está al día en pagos de nómina, seguridad social e impuestos corrientes?", evidencia: "Planillas PILA y Declaraciones" }
+                ]
+            },
+            {
+                titulo: "2. Pruebas Patrimoniales y de Rentabilidad",
+                objetivo: "Evaluar la solidez estructural y viabilidad económica del modelo de negocio.",
+                items: [
+                    { id: "2.1", nombre: "Tendencia de Resultados", desc: "¿La empresa ha evitado pérdidas operativas recurrentes en los últimos 2 o 3 periodos?", evidencia: "Estados de Resultados comparativos" },
+                    { id: "2.2", nombre: "Suficiencia Patrimonial", desc: "¿El patrimonio neto es positivo y supera mínimos legales (sin causal de disolución)?", evidencia: "Cálculo causal / Acta Asamblea" },
+                    { id: "2.3", nombre: "Deterioro de Activos", desc: "¿Los activos productivos mantienen su capacidad de generar beneficios sin deterioro severo?", evidencia: "Pruebas deterioro (Sección 27)" }
+                ]
+            },
+            {
+                titulo: "3. Pruebas Operativas, Comerciales y Legales",
+                objetivo: "Detectar factores externos o cualitativos que puedan interrumpir la operación.",
+                items: [
+                    { id: "3.1", nombre: "Concentración de Clientes", desc: "¿Está libre de depender de un único cliente clave (>50% ingresos) que haya cancelado?", evidencia: "Auxiliar ventas por cliente" },
+                    { id: "3.2", nombre: "Suministro y Proveedores", desc: "¿Está garantizado el abastecimiento de materias primas esenciales sin bloqueos?", evidencia: "Contratos de suministro" },
+                    { id: "3.3", nombre: "Personal Clave", desc: "¿Se mantiene la estabilidad del equipo directivo y técnico indispensable para operar?", evidencia: "Nómina directiva y organigrama" },
+                    { id: "3.4", nombre: "Licencias y Permisos", desc: "¿Están vigentes las concesiones, franquicias o registros sanitarios/ambientales vitales?", evidencia: "Certificados vigentes" },
+                    { id: "3.5", nombre: "Litigios y Contingencias", desc: "¿Está libre de demandas laborales, civiles o fiscales cuyo fallo adverso sea impagable?", evidencia: "Certificación abogados (Sec. 21)" }
+                ]
+            }
+        ];
+
+        // Renderizar las tablas de pruebas en el DOM
+        function renderizarPruebas() {
+            const contenedor = document.getElementById('contenedor-pruebas');
+            contenedor.innerHTML = '';
+
+            seccionesPruebas.forEach(sec => {
+                const sectionEl = document.createElement('section');
+                sectionEl.className = "bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden print-shadow-none print-break-inside";
+                
+                let filasHTML = sec.items.map(item => `
+                    <tr class="border-t border-slate-100 hover:bg-slate-50/70 transition">
+                        <td class="p-3.5 align-top">
+                            <span class="font-bold text-slate-900 text-sm">${item.id} ${item.nombre}:</span>
+                            <p class="text-xs text-slate-600 mt-0.5">${item.desc}</p>
+                            <span class="inline-block mt-1.5 text-[11px] font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
+                                Soporte: ${item.evidencia}
+                            </span>
+                        </td>
+                        <td class="p-3.5 align-top w-32">
+                            <select id="cumple_${item.id}" onchange="actualizarEstadisticas()" class="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-xs font-medium bg-white focus:ring-2 focus:ring-blue-500">
+                                <option value="">Seleccionar...</option>
+                                <option value="SI">Sí Cumple</option>
+                                <option value="NO">No Cumple</option>
+                                <option value="NA">No Aplica</option>
+                            </select>
+                        </td>
+                        <td class="p-3.5 align-top w-36">
+                            <select id="riesgo_${item.id}" onchange="cambiarColorRiesgo(this); actualizarEstadisticas();" class="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-xs font-semibold bg-white focus:ring-2 focus:ring-blue-500">
+                                <option value="">Nivel Riesgo...</option>
+                                <option value="BAJO">Bajo</option>
+                                <option value="MEDIO">Medio</option>
+                                <option value="ALTO">Alto</option>
+                            </select>
+                        </td>
+                        <td class="p-3.5 align-top">
+                            <textarea id="obs_${item.id}" rows="2" placeholder="Documente hallazgos o referencia del papel de trabajo..." class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                        </td>
+                    </tr>
+                `).join('');
+
+                sectionEl.innerHTML = `
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900">${sec.titulo}</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">${sec.objetivo}</p>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100/70 text-[11px] uppercase font-bold text-slate-600 border-b border-slate-200">
+                                    <th class="p-3.5 min-w-[260px]">Prueba / Verificación Puntual</th>
+                                    <th class="p-3.5">¿Cumple?</th>
+                                    <th class="p-3.5">Riesgo</th>
+                                    <th class="p-3.5 min-w-[220px]">Observaciones / Referencia PT</th>
+                                </tr>
+                            </thead>
+                            <tbody>${filasHTML}</tbody>
+                        </table>
+                    </div>
+                `;
+                contenedor.appendChild(sectionEl);
+            });
+        }
+
+        // Calcular automáticamente 12 meses después de la fecha de corte
+        document.getElementById('fecha_corte').addEventListener('change', function() {
+            if (!this.value) return;
+            const fecha = new Date(this.value + 'T00:00:00');
+            fecha.setFullYear(fecha.getFullYear() + 1);
+            document.getElementById('fecha_horizonte').value = fecha.toISOString().split('T')[0];
+        });
+
+        // Cambiar color visual del select de riesgo
+        function cambiarColorRiesgo(selectEl) {
+            selectEl.classList.remove('bg-emerald-50', 'text-emerald-800', 'border-emerald-300', 'bg-amber-50', 'text-amber-800', 'border-amber-300', 'bg-rose-50', 'text-rose-800', 'border-rose-300');
+            if (selectEl.value === 'BAJO') {
+                selectEl.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-300');
+            } else if (selectEl.value === 'MEDIO') {
+                selectEl.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-300');
+            } else if (selectEl.value === 'ALTO') {
+                selectEl.classList.add('bg-rose-50', 'text-rose-800', 'border-rose-300');
+            }
+        }
+
+        // Actualizar contadores y diagnóstico preliminar
+        function actualizarEstadisticas() {
+            let evaluadas = 0, bajo = 0, medio = 0, alto = 0;
+
+            seccionesPruebas.forEach(sec => {
+                sec.items.forEach(item => {
+                    const riesgo = document.getElementById(`riesgo_${item.id}`).value;
+                    if (riesgo) {
+                        evaluadas++;
+                        if (riesgo === 'BAJO') bajo++;
+                        if (riesgo === 'MEDIO') medio++;
+                        if (riesgo === 'ALTO') alto++;
+                    }
+                });
+            });
+
+            document.getElementById('stat-evaluadas').innerText = `${evaluadas} / 14`;
+            document.getElementById('stat-bajo').innerText = bajo;
+            document.getElementById('stat-medio').innerText = medio;
+            document.getElementById('stat-alto').innerText = alto;
+
+            const badge = document.getElementById('badge-diagnostico');
+            const texto = document.getElementById('texto-diagnostico');
+            badge.className = "px-4 py-2.5 rounded-xl border text-left md:text-right w-full md:w-auto transition-colors";
+
+            if (evaluadas === 0) {
+                badge.classList.add('bg-slate-100', 'border-slate-300');
+                texto.className = "text-sm sm:text-base font-bold text-slate-800";
+                texto.innerText = "Pendiente de Evaluación";
+            } else if (alto > 0) {
+                badge.classList.add('bg-rose-50', 'border-rose-300');
+                texto.className = "text-sm sm:text-base font-bold text-rose-800";
+                texto.innerText = "Alerta Crítica (Evaluar Escenario B o C)";
+            } else if (medio > 0) {
+                badge.classList.add('bg-amber-50', 'border-amber-300');
+                texto.className = "text-sm sm:text-base font-bold text-amber-800";
+                texto.innerText = "Incertidumbre Moderada (Revisar Mitigación)";
+            } else {
+                badge.classList.add('bg-emerald-50', 'border-emerald-300');
+                texto.className = "text-sm sm:text-base font-bold text-emerald-800";
+                texto.innerText = "Sugerido: Escenario A (Continuidad Normal)";
+            }
+        }
+
+        // Cargar un caso práctico realista para demostración
+        function cargarEjemplo() {
+            document.getElementById('entidad').value = "Industrias Metálicas del Valle S.A.S.";
+            document.getElementById('nit').value = "900.845.321-4";
+            document.getElementById('fecha_corte').value = "2025-12-31";
+            document.getElementById('fecha_horizonte').value = "2026-12-31";
+
+            seccionesPruebas.forEach(sec => {
+                sec.items.forEach(item => {
+                    const cumpleEl = document.getElementById(`cumple_${item.id}`);
+                    const riesgoEl = document.getElementById(`riesgo_${item.id}`);
+                    const obsEl = document.getElementById(`obs_${item.id}`);
+
+                    if (item.id === "1.1" || item.id === "1.3") {
+                        cumpleEl.value = "NO";
+                        riesgoEl.value = "ALTO";
+                        obsEl.value = "Vencimiento de obligación financiera de corto plazo por $450M en abril 2026.";
+                    } else if (item.id === "2.1") {
+                        cumpleEl.value = "NO";
+                        riesgoEl.value = "MEDIO";
+                        obsEl.value = "Pérdida neta leve en 2025 por incremento en costos de importación.";
+                    } else {
+                        cumpleEl.value = "SI";
+                        riesgoEl.value = "BAJO";
+                        obsEl.value = "Verificado sin novedades materiales en papel de trabajo.";
+                    }
+                    cambiarColorRiesgo(riesgoEl);
+                });
+            });
+
+            document.getElementById('mitigacion_riesgo').value = "Capital de trabajo negativo generado por el vencimiento a corto plazo de crédito bancario por $450 millones.";
+            document.getElementById('mitigacion_plan').value = "1) Reperfilamiento de la deuda bancaria a 48 meses con periodo de gracia de 6 meses. 2) Capitalización de acreencias de socios por $300 millones.";
+            document.getElementById('mitigacion_evidencia').value = "Carta de aprobación de reestructuración emitida por Banco de Occidente el 15/02/2026 y Acta de Asamblea N° 014.";
+
+            document.querySelector('input[name="escenario_final"][value="B"]').checked = true;
+            document.getElementById('firma_contador').value = "Iván Jiménez";
+            document.getElementById('tp_contador').value = "T.P. 145890-T";
+            document.getElementById('firma_gerente').value = "Carlos Andrés Mendoza";
+            document.getElementById('cc_gerente').value = "C.C. 94.512.874";
+
+            actualizarEstadisticas();
+            mostrarModal("Ejemplo Cargado", "Se ha cargado un caso práctico realista (Escenario B: Incertidumbre Material mitigable). Puedes editar cualquier campo o probar el botón Imprimir / Guardar PDF.");
+        }
+
+        // Limpiar todos los campos
+        function limpiarFormulario() {
+            document.querySelectorAll('input[type="text"], input[type="date"], textarea').forEach(el => el.value = '');
+            document.querySelectorAll('select').forEach(el => {
+                el.value = '';
+                cambiarColorRiesgo(el);
+            });
+            document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+            actualizarEstadisticas();
+        }
+
+        function mostrarModal(titulo, mensaje) {
+            document.getElementById('modal-title').innerText = titulo;
+            document.getElementById('modal-msg').innerText = mensaje;
+            document.getElementById('custom-modal').classList.remove('hidden');
+            document.getElementById('custom-modal').classList.add('flex');
+        }
+
+        function cerrarModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+            document.getElementById('custom-modal').classList.remove('flex');
+        }
+
+        // Generar automáticamente el borrador de Nota de Revelación según los hallazgos marcados
+        function generarNotaRevelacion() {
+            const entidad = document.getElementById('entidad').value.trim() || "[NOMBRE DE LA ENTIDAD]";
+            const nit = document.getElementById('nit').value.trim() || "[NIT]";
+            const fechaCorte = document.getElementById('fecha_corte').value || "[FECHA DE CORTE]";
+            const fechaHorizonte = document.getElementById('fecha_horizonte').value || "[12 MESES POSTERIORES]";
+            
+            const mitigacionRiesgo = document.getElementById('mitigacion_riesgo').value.trim();
+            const mitigacionPlan = document.getElementById('mitigacion_plan').value.trim();
+            const mitigacionEvidencia = document.getElementById('mitigacion_evidencia').value.trim();
+
+            // Recopilar hallazgos marcados con Riesgo Medio o Alto
+            let hallazgosDetectados = [];
+            let tieneAlto = false;
+            let tieneMedio = false;
+
+            seccionesPruebas.forEach(sec => {
+                sec.items.forEach(item => {
+                    const riesgo = document.getElementById(`riesgo_${item.id}`).value;
+                    const obs = document.getElementById(`obs_${item.id}`).value.trim();
+                    if (riesgo === 'ALTO' || riesgo === 'MEDIO') {
+                        if (riesgo === 'ALTO') tieneAlto = true;
+                        if (riesgo === 'MEDIO') tieneMedio = true;
+                        const detalleObs = obs ? `: ${obs}` : ".";
+                        hallazgosDetectados.push(`• ${item.nombre} (Riesgo ${riesgo})${detalleObs}`);
+                    }
+                });
+            });
+
+            // Determinar escenario (el seleccionado manualmente o el sugerido por los riesgos)
+            const radioSeleccionado = document.querySelector('input[name="escenario_final"]:checked');
+            let escenario = radioSeleccionado ? radioSeleccionado.value : (tieneAlto || tieneMedio ? 'B' : 'A');
+
+            let textoNota = `NOTA X. EVALUACIÓN DE LA HIPÓTESIS DE NEGOCIO EN MARCHA\n`;
+            textoNota += `Entidad: ${entidad} | NIT: ${nit}\n`;
+            textoNota += `Fecha de corte: ${fechaCorte} (Horizonte evaluado hasta: ${fechaHorizonte})\n\n`;
+
+            if (escenario === 'A') {
+                textoNota += `En cumplimiento de lo establecido en los párrafos 3.8 y 3.9 de la Sección 3 ("Presentación de Estados Financieros") de la NIIF para las Pymes, la Administración de ${entidad} ha evaluado la capacidad de la entidad para continuar como un negocio en marcha cubriendo un horizonte mínimo de doce (12) meses posteriores a la fecha de cierre (${fechaCorte}).\n\n`;
+                textoNota += `Como resultado de las pruebas financieras, patrimoniales, operativas y legales aplicadas —incluyendo el análisis del capital de trabajo neto, flujos de efectivo proyectados, cumplimiento de obligaciones financieras y vigencia de licencias—, la Gerencia concluye que no existen incertidumbres materiales relacionadas con eventos o condiciones que puedan aportar dudas significativas sobre la capacidad de la entidad para continuar operando normalmente.\n\n`;
+                textoNota += `En consecuencia, los presentes estados financieros han sido preparados bajo la hipótesis fundamental de negocio en marcha.`;
+            } else if (escenario === 'B') {
+                textoNota += `En cumplimiento de los párrafos 3.8 y 3.9 de la Sección 3 ("Presentación de Estados Financieros") de la NIIF para las Pymes, la Administración de ${entidad} ha efectuado una evaluación rigurosa de su capacidad para continuar como negocio en marcha durante los doce (12) meses siguientes al ${fechaCorte}.\n\n`;
+                textoNota += `1. Eventos y condiciones que generan incertidumbre material:\n`;
+                if (mitigacionRiesgo) {
+                    textoNota += `${mitigacionRiesgo}\n\n`;
+                }
+                if (hallazgosDetectados.length > 0) {
+                    textoNota += `Adicionalmente, en los papeles de trabajo de evaluación se identificaron los siguientes factores de atención:\n${hallazgosDetectados.join('\n')}\n\n`;
+                } else if (!mitigacionRiesgo) {
+                    textoNota += `[Describir aquí los eventos financieros u operativos que generan dudas significativas sobre la continuidad].\n\n`;
+                }
+
+                textoNota += `2. Planes de acción y mitigación de la Gerencia:\n`;
+                textoNota += mitigacionPlan 
+                    ? `${mitigacionPlan}\n\n` 
+                    : `[Detallar las acciones concretas de reestructuración, capitalización o ajuste operativo aprobadas por la Gerencia].\n\n`;
+
+                textoNota += `3. Evidencia de viabilidad y conclusión contable:\n`;
+                textoNota += mitigacionEvidencia 
+                    ? `La ejecutabilidad de estos planes se encuentra respaldada mediante: ${mitigacionEvidencia}.\n\n` 
+                    : `La Administración cuenta con soportes documentales formales que respaldan la viabilidad financiera y operativa de los planes descritos.\n\n`;
+
+                textoNota += `Con base en lo anterior, aunque existe la incertidumbre material antes revelada, la Administración considera viable la continuidad de las operaciones y, por tanto, los estados financieros al ${fechaCorte} han sido preparados bajo la hipótesis de negocio en marcha.`;
+            } else if (escenario === 'C') {
+                textoNota += `REVELACIÓN DE NO APLICACIÓN DE LA HIPÓTESIS DE NEGOCIO EN MARCHA (Párrafo 3.9 - Sección 3 NIIF para las Pymes)\n\n`;
+                textoNota += `La Administración de ${entidad}, tras evaluar la situación financiera, patrimonial y operativa al corte del ${fechaCorte}, informa que la entidad no cumple con la hipótesis fundamental de negocio en marcha debido a que existe la intención formal de liquidar la sociedad / cesar operaciones (o no existe otra alternativa comercialmente realista distinta a la liquidación).\n\n`;
+                textoNota += `Factores determinantes:\n`;
+                if (mitigacionRiesgo) textoNota += `${mitigacionRiesgo}\n`;
+                if (hallazgosDetectados.length > 0) textoNota += `${hallazgosDetectados.join('\n')}\n\n`;
+                textoNota += `Base de preparación de los Estados Financieros:\n`;
+                textoNota += `En estricta observancia del párrafo 3.9 de la NIIF para las Pymes, los presentes estados financieros NO han sido preparados bajo la base de negocio en marcha, sino bajo una base contable de liquidación (valor neto de realización para los activos y valor de exigibilidad inmediata para los pasivos).`;
+            }
+
+            document.getElementById('texto-nota-revelacion').value = textoNota;
+            document.getElementById('feedback-copiado').classList.add('opacity-0');
+            document.getElementById('modal-nota').classList.remove('hidden');
+            document.getElementById('modal-nota').classList.add('flex');
+        }
+
+        function cerrarModalNota() {
+            document.getElementById('modal-nota').classList.add('hidden');
+            document.getElementById('modal-nota').classList.remove('flex');
+        }
+
+        // Copiar texto plano al portapapeles (compatible con entornos iframe/GitHub Pages)
+        function copiarNotaTexto() {
+            const textarea = document.getElementById('texto-nota-revelacion');
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            
+            const feedback = document.getElementById('feedback-copiado');
+            feedback.classList.remove('opacity-0');
+            setTimeout(() => feedback.classList.add('opacity-0'), 3000);
+        }
+
+        // Descargar la Nota directamente como documento compatible con Microsoft Word (.doc)
+        function descargarNotaWord() {
+            const entidad = document.getElementById('entidad').value.trim() || "Entidad";
+            const contenidoTexto = document.getElementById('texto-nota-revelacion').value;
+            const parrafosHTML = contenidoTexto
+                .split('\n')
+                .map(linea => linea.trim() === '' ? '<p>&nbsp;</p>' : `<p style="font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.5; text-align: justify; margin-bottom: 8pt;">${linea}</p>`)
+                .join('');
+
+            const htmlWord = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                <head><meta charset='utf-8'><title>Nota Negocio en Marcha</title></head>
+                <body>${parrafosHTML}</body>
+                </html>
+            `;
+
+            const blob = new Blob(['\ufeff', htmlWord], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Nota_Negocio_en_Marcha_${entidad.replace(/[^a-zA-Z0-9]/g, '_')}.doc`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        // Inicializar aplicación al cargar
+        window.onload = function() {
+            renderizarPruebas();
+        };
+    </script>
+</body>
+</html>
